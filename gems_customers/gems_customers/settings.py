@@ -99,3 +99,5 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
+
+GEM_POPULARITY_NUMBER = int(os.getenv('GEMS_POPULARITY', default=1))

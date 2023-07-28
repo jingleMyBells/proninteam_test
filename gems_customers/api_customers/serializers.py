@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from api_customers.models import Customer
@@ -15,7 +16,7 @@ class TopCustomersSerializer(serializers.ModelSerializer):
         """
         current_user_gems = []
         for gem, users in self.context['gems'].items():
-            if len(users) > 1 and obj.id in users:
+            if len(users) > settings.GEM_POPULARITY_NUMBER and obj.id in users:
                 current_user_gems.append(gem)
         return current_user_gems
 
