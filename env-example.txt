@@ -2,3 +2,4 @@ DB_ENGINE=django.db.backends.sqlite3
 DB_NAME=db.sqlite3
 D_KEY=djangosecret
 DEBUG_MODE=ON
+GEMS_POPULARITY=1
