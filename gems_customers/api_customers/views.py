@@ -1,5 +1,7 @@
 from http import HTTPStatus
 
+from django.core.cache import cache
+
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,7 +17,9 @@ class CustomerView(APIView):
         queryset = Customer.objects.all()[:5]
         serializer = TopCustomersSerializer(queryset, many=True)
         serializer.context['gems'] = generate_gems_info(queryset)
-        return Response(serializer.data, HTTPStatus.OK)
+        response = cache.get_or_set('customers', serializer.data, 60)
+
+        return Response(response, HTTPStatus.OK)
 
 
 class DealsView(APIView):
@@ -23,7 +27,7 @@ class DealsView(APIView):
 
     def post(self, request):
 
-        #FIXME! тут где-то надо не забыть почистить кеш
+        cache.delete('customers')
 
         if len(request.FILES) == 0:
             return Response('Приложите файл', HTTPStatus.BAD_REQUEST)
