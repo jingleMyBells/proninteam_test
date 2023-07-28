@@ -27,6 +27,14 @@ cd proninteam_test
   docker-compose up
 ```
 
+API будет отвечать по адресу http://localhost:8000
+```http
+  GET /api/consumers/
+```
+```http
+  POST /api/deals/
+```
+
 ###### Заметки:
 
 `Формулировка в ТЗ "2.Ранее загруженные версии файла deals.csv  
