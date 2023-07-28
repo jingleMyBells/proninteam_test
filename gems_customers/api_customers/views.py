@@ -29,11 +29,8 @@ class DealsView(APIView):
             return Response('Приложите файл', HTTPStatus.BAD_REQUEST)
         input_csv = request.FILES.get('deals')
 
-        process_input_data(input_csv)
-        return Response('OK', HTTPStatus.OK)
-
-        # try:
-        #     process_input_data(input_csv)
-        #     return Response('OK', HTTPStatus.OK)
-        # except Exception as e:
-        #     return Response(e, HTTPStatus.INTERNAL_SERVER_ERROR)
+        try:
+            process_input_data(input_csv)
+            return Response('OK', HTTPStatus.OK)
+        except Exception as e:
+            return Response(f'Error, Desc: {e.args}', HTTPStatus.INTERNAL_SERVER_ERROR)
