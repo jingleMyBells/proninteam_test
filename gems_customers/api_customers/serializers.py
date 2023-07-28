@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api_customers.models import Customer, Deal, Item
+from api_customers.models import Customer
 
 
 class TopCustomersSerializer(serializers.ModelSerializer):

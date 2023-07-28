@@ -1,8 +1,7 @@
 from http import HTTPStatus
 
 from django.core.cache import cache
-
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -35,6 +34,9 @@ class DealsView(APIView):
 
         try:
             process_input_data(input_csv)
-            return Response('OK', HTTPStatus.OK)
+            return Response('Status: OK', HTTPStatus.OK)
         except Exception as e:
-            return Response(f'Error, Desc: {e.args}', HTTPStatus.INTERNAL_SERVER_ERROR)
+            return Response(
+                f'Status: Error, Desc: {e.args}',
+                HTTPStatus.INTERNAL_SERVER_ERROR,
+            )

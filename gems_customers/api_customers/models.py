@@ -36,4 +36,3 @@ class Deal(models.Model):
         on_delete=models.SET(None),
         null=True,
     )
-

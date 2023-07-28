@@ -1,6 +1,5 @@
 import csv
 import io
-
 from datetime import datetime
 
 from api_customers.models import Customer, Deal, Item
@@ -71,7 +70,10 @@ class DealsInputDispatcher:
                 Deal(
                     money_total=money,
                     quantity=deal.get('quantity'),
-                    perform_date=datetime.strptime(deal.get('date'), DATETIME_FORMAT),
+                    perform_date=datetime.strptime(
+                        deal.get('date'),
+                        DATETIME_FORMAT,
+                    ),
                     customer=customer,
                     item=Item.objects.filter(
                         title=deal.get('item'),
@@ -102,5 +104,3 @@ def generate_gems_info(queryset):
             if user.id not in popular_gems[gem]:
                 popular_gems[gem].append(user.id)
     return popular_gems
-
-
