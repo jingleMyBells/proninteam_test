@@ -8,6 +8,11 @@ class TopCustomersSerializer(serializers.ModelSerializer):
     gems = serializers.SerializerMethodField(method_name='generate_gems')
 
     def generate_gems(self, obj):
+        """
+        :param obj: сериализуемый покупатель
+        :return: список камней, которые покупали
+        2 и более топовых покупателя.
+        """
         current_user_gems = []
         for gem, users in self.context['gems'].items():
             if len(users) > 1 and obj.id in users:

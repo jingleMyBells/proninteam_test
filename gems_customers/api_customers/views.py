@@ -11,6 +11,11 @@ from api_customers.services import generate_gems_info, process_input_data
 
 
 class CustomerView(APIView):
+    """
+    Представление эндпоинта получения данных.
+    Выводит топ-5 покупателей в базе с тратами и
+    покупками популярных камней.
+    """
 
     def get(self, request):
         queryset = Customer.objects.all()[:5]
@@ -22,6 +27,12 @@ class CustomerView(APIView):
 
 
 class DealsView(APIView):
+    """
+    Представление эндпоинта загрузки данных.
+    Обновляет списки покупателей и камней,
+    Добавляет новые сделки.
+    """
+
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request):

@@ -8,6 +8,12 @@ DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
 
 
 class DealsInputDispatcher:
+    """
+    Диспетчер входящих сделок.
+    Распаковыает входящий csv,
+    создает записи о покпателях и камнях, если их нет,
+    добавляет записи о сделках.
+    """
 
     def __init__(self):
         self.deals = []
@@ -85,6 +91,10 @@ class DealsInputDispatcher:
 
 
 def process_input_data(file):
+    """
+    :param file: результат чтение inMemoryUploaded File
+    :return: None
+    """
     dispatcher = DealsInputDispatcher()
     dispatcher.temporary_save_deals(file)
     dispatcher.save_items_to_db()
@@ -93,6 +103,12 @@ def process_input_data(file):
 
 
 def generate_gems_info(queryset):
+    """
+    Функция для формирования контекста для сериализатора.
+    Формирует словарь камней, популярных у топовых покупателей.
+    :param queryset: queryset пользователей
+    :return: dict с популярными камнями
+    """
     popular_gems = dict()
 
     for user in queryset:
