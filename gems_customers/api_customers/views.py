@@ -1,17 +1,21 @@
-import csv
-import io
-
 from http import HTTPStatus
 
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from api_customers.services import DealsInputDispatcher
+from api_customers.models import Customer
+from api_customers.serializers import TopCustomersSerializer
+from api_customers.services import generate_gems_info, process_input_data
 
 
 class CustomerView(APIView):
-    pass
+
+    def get(self, request):
+        queryset = Customer.objects.all()[:5]
+        serializer = TopCustomersSerializer(queryset, many=True)
+        serializer.context['gems'] = generate_gems_info(queryset)
+        return Response(serializer.data, HTTPStatus.OK)
 
 
 class DealsView(APIView):
@@ -25,10 +29,11 @@ class DealsView(APIView):
             return Response('Приложите файл', HTTPStatus.BAD_REQUEST)
         input_csv = request.FILES.get('deals')
 
-        dispatcher = DealsInputDispatcher()
-        dispatcher.temporary_save_deals(input_csv)
-        dispatcher.save_items_to_db()
-        dispatcher.save_customers_to_db()
-        dispatcher.save_deals_to_db()
-
+        process_input_data(input_csv)
         return Response('OK', HTTPStatus.OK)
+
+        # try:
+        #     process_input_data(input_csv)
+        #     return Response('OK', HTTPStatus.OK)
+        # except Exception as e:
+        #     return Response(e, HTTPStatus.INTERNAL_SERVER_ERROR)

@@ -61,21 +61,46 @@ class DealsInputDispatcher:
         queryset = []
 
         for deal in self.deals:
+            customer = Customer.objects.filter(
+                username=deal.get('customer'),
+            ).first()
+            money = int(deal.get('total'))
+            customer.spent_money += money
+            customer.save()
             queryset.append(
                 Deal(
-                    money_total=deal.get('total'),
+                    money_total=money,
                     quantity=deal.get('quantity'),
                     perform_date=datetime.strptime(deal.get('date'), DATETIME_FORMAT),
-                    customer=Customer.objects.filter(
-                        username=deal.get('customer')
-                    ).first(),
+                    customer=customer,
                     item=Item.objects.filter(
-                        title=deal.get('item')
+                        title=deal.get('item'),
                     ).first()
                 )
             )
 
         Deal.objects.bulk_create(queryset)
 
+
+def process_input_data(file):
+    dispatcher = DealsInputDispatcher()
+    dispatcher.temporary_save_deals(file)
+    dispatcher.save_items_to_db()
+    dispatcher.save_customers_to_db()
+    dispatcher.save_deals_to_db()
+
+
+def generate_gems_info(queryset):
+    popular_gems = dict()
+
+    for user in queryset:
+        deals = list(user.deals.values_list('item__title'))
+        without_tuples = list(map(lambda elem: elem[0], deals))
+        for gem in without_tuples:
+            if popular_gems.get(gem) is None:
+                popular_gems[gem] = []
+            if user.id not in popular_gems[gem]:
+                popular_gems[gem].append(user.id)
+    return popular_gems
 
 

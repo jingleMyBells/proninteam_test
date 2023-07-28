@@ -7,6 +7,9 @@ class Customer(models.Model):
 
     spent_money = models.IntegerField(default=0)
 
+    class Meta:
+        ordering = ['-spent_money']
+
 
 class Item(models.Model):
 
@@ -25,6 +28,7 @@ class Deal(models.Model):
         Customer,
         on_delete=models.SET(None),
         null=True,
+        related_name='deals'
     )
 
     item = models.ForeignKey(
